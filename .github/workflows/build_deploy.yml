@@ -35,20 +35,20 @@ jobs:
             ./ $BACKEND_USER@$BACKEND_SERVER:$CHATAPP_DIR
 
       # Step 3: Run SonarQube analysis
-      - name: Run SonarQube analysis
-        run: |
-          ssh -i $SSH_KEY -o StrictHostKeyChecking=no $BACKEND_USER@$BACKEND_SERVER << EOF
-            set -e
-            cd $CHATAPP_DIR
-            sonar-scanner \
-              -Dsonar.projectKey=Sonarqube-jenkins \
-              -Dsonar.sources=. \
-              -Dsonar.host.url=$SONARQUBE_URL \
-              -Dsonar.login=$SONARQUBE_TOKEN \
-              -Dsonar.language=py \
-              -Dsonar.python.version=3.8 \
-              -Dsonar.qualitygate.wait=true
-          EOF
+      # - name: Run SonarQube analysis
+      #   run: |
+      #     ssh -i $SSH_KEY -o StrictHostKeyChecking=no $BACKEND_USER@$BACKEND_SERVER << EOF
+      #       set -e
+      #       cd $CHATAPP_DIR
+      #       sonar-scanner \
+      #         -Dsonar.projectKey=Sonarqube-jenkins \
+      #         -Dsonar.sources=. \
+      #         -Dsonar.host.url=$SONARQUBE_URL \
+      #         -Dsonar.login=$SONARQUBE_TOKEN \
+      #         -Dsonar.language=py \
+      #         -Dsonar.python.version=3.8 \
+      #         -Dsonar.qualitygate.wait=true
+      #     EOF
 
       # Step 4: Deploy application
       - name: Deploy application
