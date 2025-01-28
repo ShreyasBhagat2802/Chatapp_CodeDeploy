@@ -1,0 +1,60 @@
+name: Build and Deploy Backend
+
+on:
+  push:
+    branches:
+      - main # Trigger on pushes to the main branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    name: Build and Deploy Backend Application
+    runs-on: ubuntu-latest
+
+    env:
+      WORKSPACE: ./ # Local project directory
+      BACKEND_USER: ShreyasChatApp
+      BACKEND_SERVER: 10.0.9.126
+      CHATAPP_DIR: /Django_Chatapp # Path to deploy on the backend server
+      SERVICE_NAME: django-backend # Your backend service name
+      SSH_KEY: /var/lib/jenkins/.ssh/id_rsa # Path to SSH private key
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH key for the backend server
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ env.SSH_KEY }}
+
+      # Step 3: Sync files to the backend server
+      - name: Sync files to the backend server
+        run: |
+          rsync -avz $WORKSPACE/ $BACKEND_USER@$BACKEND_SERVER:$CHATAPP_DIR
+
+      # Step 4: Execute deployment tasks on the backend server
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $BACKEND_USER@$BACKEND_SERVER << 'EOF'
+            set -e
+            echo ">>> Activating virtual environment..."
+            source ~/.bashrc
+            cd $CHATAPP_DIR
+            source venv/bin/activate
+
+            echo ">>> Installing dependencies..."
+            pip install -r requirements.txt
+
+            echo ">>> Running database migrations..."
+            bash ~/db_data.sh
+
+            echo ">>> Restarting the service..."
+            sudo systemctl restart $SERVICE_NAME
+
+            echo ">>> Deployment complete!"
+          EOF
