@@ -38,11 +38,10 @@ jobs:
             set -e
             echo ">>> Activating virtual environment..."
             source ~/.bashrc
-            cd $CHATAPP_DIR
             source venv/bin/activate
-
+            cd $CHATAPP_DIR
             echo ">>> Installing dependencies..."
-            pip install -r requirements.txt
+            pip3 install -r requirements.txt
 
             echo ">>> Running database migrations..."
             bash ~/db_data.sh
