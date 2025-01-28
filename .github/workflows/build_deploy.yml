@@ -3,7 +3,7 @@ name: Build and Deploy Backend
 on:
   push:
     branches:
-      - main # Trigger on pushes to the main branch
+      - main
   pull_request:
     branches:
       - main
@@ -17,9 +17,9 @@ jobs:
       WORKSPACE: ./ # Local project directory
       BACKEND_USER: ShreyasChatApp
       BACKEND_SERVER: 10.0.9.126
-      CHATAPP_DIR: /Django_Chatapp # Path to deploy on the backend server
-      SERVICE_NAME: django-backend # Your backend service name
-      SSH_KEY: /var/lib/jenkins/.ssh/id_rsa # Path to SSH private key
+      CHATAPP_DIR: /Django_Chatapp
+      SERVICE_NAME: django-backend
+      SSH_KEY: /var/lib/jenkins/.ssh/id_rsa
 
     steps:
       # Step 1: Check out the repository
@@ -33,23 +33,30 @@ jobs:
             -e "ssh -o StrictHostKeyChecking=no -i $SSH_KEY" \
             $WORKSPACE/ $BACKEND_USER@$BACKEND_SERVER:$CHATAPP_DIR
 
+          ssh -i "$SSH_KEY" $BACKEND_USER@$BACKEND_SERVER "ls -al $CHATAPP_DIR"
+
       # Step 3: Execute deployment tasks on the backend server
       - name: Deploy application
         run: |
-          ssh $BACKEND_USER@$BACKEND_SERVER << 'EOF'
+          ssh -i "$SSH_KEY" $BACKEND_USER@$BACKEND_SERVER << 'EOF'
             set -e
-            source ~/.bashrc
-            cd ~
-            source venv/bin/activate
+            echo ">>> Activating virtual environment..."
+            source ~/venv/bin/activate
+
             echo ">>> Navigating to project directory..."
             cd $CHATAPP_DIR
 
             echo ">>> Installing dependencies..."
-            pip3 install -r requirements.txt
-      
+            if [ -f requirements.txt ]; then
+                pip3 install -r requirements.txt
+            else
+                echo "Error: requirements.txt not found!"
+                exit 1
+            fi
+
             echo ">>> Running database migrations..."
             bash ~/db_data.sh
-            
+
             echo ">>> Restarting the service..."
             sudo systemctl restart $SERVICE_NAME
 
