@@ -11,7 +11,7 @@ on:
 jobs:
   build-deploy:
     name: Build and Deploy Backend Application
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     env:
       WORKSPACE: ./ # Local project directory
