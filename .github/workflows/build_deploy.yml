@@ -38,15 +38,30 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i "$SSH_KEY" $BACKEND_USER@$BACKEND_SERVER << 'EOF'
             set -e
-            echo ">>> Activating virtual environment..."
-            source ~/.bashrc
-            source venv/bin/activate
+            echo ">>> Navigating to project directory..."
             cd $CHATAPP_DIR
+
+            echo ">>> Setting up virtual environment..."
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+            source venv/bin/activate
+
             echo ">>> Installing dependencies..."
-            pip3 install -r requirements.txt
+            if [ -f "requirements.txt" ]; then
+              pip3 install -r requirements.txt
+            else
+              echo "Error: requirements.txt not found!"
+              exit 1
+            fi
 
             echo ">>> Running database migrations..."
-            bash ~/db_data.sh
+            if [ -f "~/db_data.sh" ]; then
+              bash ~/db_data.sh
+            else
+              echo "Error: db_data.sh script not found!"
+              exit 1
+            fi
 
             echo ">>> Restarting the service..."
             sudo systemctl restart $SERVICE_NAME
