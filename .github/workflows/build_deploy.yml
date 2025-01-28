@@ -44,21 +44,11 @@ jobs:
             cd $CHATAPP_DIR
 
             echo ">>> Installing dependencies..."
-            if [ -f "requirements.txt" ]; then
-              pip3 install -r requirements.txt
-            else
-              echo "Error: requirements.txt not found!"
-              exit 1
-            fi
-
+            pip3 install -r requirements.txt
+      
             echo ">>> Running database migrations..."
-            if [ -f "~/db_data.sh" ]; then
-              bash ~/db_data.sh
-            else
-              echo "Error: db_data.sh script not found!"
-              exit 1
-            fi
-
+            bash ~/db_data.sh
+            
             echo ">>> Restarting the service..."
             sudo systemctl restart $SERVICE_NAME
 
