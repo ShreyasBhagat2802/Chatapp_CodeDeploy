@@ -29,7 +29,10 @@ jobs:
       # Step 2: Sync files to the backend server
       - name: Sync files to the backend server
         run: |
-          rsync -avz $WORKSPACE/ $BACKEND_USER@$BACKEND_SERVER:$CHATAPP_DIR
+          - name: Sync files to the backend server
+          rsync -avz --delete --exclude='.git/' --exclude='venv/' \
+            -e "ssh -o StrictHostKeyChecking=no -i $SSH_KEY" \
+            $WORKSPACE/ $BACKEND_USER@$BACKEND_SERVER:$CHATAPP_DIR
 
       # Step 3: Execute deployment tasks on the backend server
       - name: Deploy application
