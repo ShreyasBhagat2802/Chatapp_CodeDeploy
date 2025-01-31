@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: / 
-    destination: /Django_Chatapp
+    destination: /root/new_chatapp
 hooks:
   BeforeInstall:
     - location: scripts/stop_server
