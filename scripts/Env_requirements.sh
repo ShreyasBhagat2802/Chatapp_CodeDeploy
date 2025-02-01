@@ -6,4 +6,4 @@ set -e  # Exit on errors
 source /home/ShreyasChatApp/venv/bin/activate
 
 # Install required dependencies
-pip install -r /Django_Chatapp/requirements.txt
+pip3 install -r /Django_Chatapp/requirements.txt
