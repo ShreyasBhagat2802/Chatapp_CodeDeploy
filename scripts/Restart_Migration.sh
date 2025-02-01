@@ -4,7 +4,7 @@ set -e  # Exit on errors
 
 # Navigate to the app directory
 cd /Django_Chatapp/fundoo
-
+source /home/ShreyasChatApp/venv/bin/activate
 # Run database migrations
 python3 manage.py makemigrations
 bash ~/db_data.sh
