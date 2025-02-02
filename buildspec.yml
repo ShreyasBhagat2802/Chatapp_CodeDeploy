@@ -9,11 +9,6 @@ phases:
       - python3 -m venv venv  # Create virtual environment
       - bash -c "source venv/bin/activate && pip3 install -r requirements.txt"
 
-  pre_build:
-    commands:
-      - echo ">>> Running database migrations..."
-      - bash ~/db_data.sh  # Ensure this script is available in your repo
-
   build:
     commands:
       - echo ">>> Running tests..."
