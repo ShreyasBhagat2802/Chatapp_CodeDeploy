@@ -7,9 +7,7 @@ phases:
     commands:
       - echo ">>> Installing dependencies..."
       - python3 -m venv venv  # Create virtual environment
-      - source venv/bin/activate  # Activate virtual environment
-      - pip3 install --upgrade pip  # Ensure latest pip version
-      - pip3 install -r requirements.txt  # Install dependencies
+      - bash -c "source venv/bin/activate && pip3 install -r requirements.txt"
 
   pre_build:
     commands:
