@@ -1,11 +1,6 @@
 version: 0.0
 os: linux
 
-files:
-  - source: /
-    destination: /Django_Chatapp
-    overwrite: true
-
 hooks:
   BeforeInstall:
     - location: scripts/git_pull.sh
