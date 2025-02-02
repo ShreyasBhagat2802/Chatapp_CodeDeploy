@@ -12,7 +12,6 @@ phases:
   build:
     commands:
       - echo ">>> Running tests..."
-      - python3 manage.py migrate
 
   post_build:
     commands:
