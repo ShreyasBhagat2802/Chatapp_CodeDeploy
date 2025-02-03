@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: /new_chatapp
+    destination: /Django_Chatapp
     file_exists_behavior: OVERWRITE
 
 hooks:
