@@ -8,9 +8,6 @@ files:
     
 hooks:
   BeforeInstall:
-    - location: scripts/git_pull.sh
-      runas: ShreyasChatApp
-      
     - location: scripts/Env_requirements.sh
       runas: ShreyasChatApp
 
