@@ -1,13 +1,12 @@
 version: 0.0
 os: linux
 
-files:
-  - source: /
-    destination: /Django_Chatapp
-    file_exists_behavior: OVERWRITE
 
 hooks:
   BeforeInstall:
+    - location: scripts/git_pull.sh
+      runas: ShreyasChatApp
+      
     - location: scripts/Env_requirements.sh
       runas: ShreyasChatApp
 
