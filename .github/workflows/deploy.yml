@@ -3,7 +3,7 @@ name: Deploy Django Backend
 on:
   push:
     branches:
-      - main  # Change this if using another branch
+      - main  # Change this if you're using another branch
 
 jobs:
   deploy:
@@ -13,16 +13,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH Access
+      - name: Setup SSH and Deploy
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 10.0.3.221 >> ~/.ssh/known_hosts
 
-      - name: Pull Changes and Restart Container
-        run: |
-          ssh ubuntu@10.0.3.221 << 'EOF'
-            cd /home/ubuntu/chatapp
+          # SSH into the server and pull the latest code
+          ssh -o StrictHostKeyChecking=no ubuntu@10.0.3.221 << 'EOF'
+            cd /home/ubuntu/django_chatapp
             git pull origin main
           EOF
