@@ -1,0 +1,28 @@
+name: Deploy Django Backend
+
+on:
+  push:
+    branches:
+      - main  # Change this if using another branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH Access
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 10.0.3.221 >> ~/.ssh/known_hosts
+
+      - name: Pull Changes and Restart Container
+        run: |
+          ssh ubuntu@10.0.3.221 << 'EOF'
+            cd /home/ubuntu/chatapp
+            git pull origin main
+          EOF
