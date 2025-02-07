@@ -17,8 +17,18 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
+          # Create SSH directory
+          mkdir -p ~/.ssh
+          
+          # Write the private key to a file
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add the server to known hosts
+          ssh-keyscan -H 10.0.3.221 >> ~/.ssh/known_hosts
+
           # SSH into the server and pull the latest code
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -o StrictHostKeyChecking=no ubuntu@10.0.3.221 << 'EOF'
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@10.0.3.221 << 'EOF'
             cd /home/ubuntu/chatapp
             git pull origin main
           EOF
