@@ -19,6 +19,6 @@ jobs:
         run: |
           # SSH into the server and pull the latest code
           ssh -i ${{ secrets.SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@10.0.3.221 << 'EOF'
-            cd /home/ubuntu/django_chatapp
+            cd /home/ubuntu/chatapp
             git pull origin main
           EOF
