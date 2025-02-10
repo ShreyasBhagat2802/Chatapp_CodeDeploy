@@ -19,7 +19,7 @@ jobs:
           chmod 600 private_key.pem
 
       - name: Test SSH Connection
-        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@10.0.3.221 "echo SSH Connection Successful"  
+        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@52.215.235.254 "echo SSH Connection Successful"  
         
       # - name: Deploy to Server
       #   uses: appleboy/ssh-action@master
