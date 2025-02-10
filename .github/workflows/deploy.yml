@@ -13,12 +13,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Create SSH Key File
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
       - name: Test SSH Connection
-        run: ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }}ubuntu@10.0.3.221 "echo SSH Connection Successful"
+        run: ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@10.0.3.221 "echo SSH Connection Successful"
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ubuntu@10.0.3.221 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ubuntu@10.0.3.221 << 'EOF'
             cd ~/django_chatapp
             git pull origin main
           EOF
