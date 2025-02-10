@@ -1,9 +1,9 @@
-name: Deploy Django Backend
+name: Deploy Django App on Host
 
 on:
   push:
     branches:
-      - main  # Change this if you're using another branch
+      - main  # Trigger on push to main branch
 
 jobs:
   deploy:
@@ -13,12 +13,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH and Deploy
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          # SSH into the server and pull the latest code
-          ssh -i SSH_PRIVATE_KEY -o StrictHostKeyChecking=no ubuntu@10.0.3.221 << 'EOF'
-            cd /home/ubuntu/chatapp
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/django_chatapp
             git pull origin main
-          EOF
