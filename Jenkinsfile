@@ -35,7 +35,7 @@ pipeline {
                     sh """
                     ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
                       set -e
-                      cd ${PROJECT_DIR}
+                      cd /home/ubuntu/chatapp
                       docker stop $(docker ps -q)
                       docker rm $(docker ps -aq)
                       docker rmi $(docker images -q)
