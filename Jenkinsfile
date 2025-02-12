@@ -33,14 +33,13 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
-                      set -e
+                    ssh -i ${SSH_KEY} ${DOCKER_SERVER}  << EOF
                       cd /home/ubuntu/chatapp
                       docker stop $(docker ps -q)
                       docker rm $(docker ps -aq)
                       docker rmi $(docker images -q)
                       docker compose --env-file .env up -d 
-                    '
+                    EOF
                     """
                 }
             }
@@ -50,9 +49,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
+                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} << EOF
                       docker ps
-                    '
+                    EOF
                     """
                 }
             }
