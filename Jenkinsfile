@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -33,15 +32,15 @@ pipeline {
         stage('🐳 Build & Start Containers on Docker Server') {
             steps {
                 script {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} $DOCKER_SERVER '
-                        cd ${PROJECT_DIR}
-                        docker ps -q | xargs docker stop
-                        docker ps -aq | xargs docker rm
-                        docker images -q | xargs docker rmi
-                        docker compose --env-file /home/ubuntu/chatapp/.env up -d 
+                    sh """
+                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
+                      cd ${PROJECT_DIR}
+                      docker stop $(docker ps -q)
+                      docker rm $(docker ps -aq)
+                      docker rmi $(docker images -q)
+                      docker compose --env-file .env up -d 
                     '
-                    '''
+                    """
                 }
             }
         }
@@ -49,11 +48,11 @@ pipeline {
         stage('✅ Check Running Containers') {
             steps {
                 script {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} $DOCKER_SERVER ' 
-                        docker ps
+                    sh """
+                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
+                      docker ps
                     '
-                    '''
+                    """
                 }
             }
         }
