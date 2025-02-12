@@ -35,11 +35,11 @@ pipeline {
                 script {
                     sh '''
                     ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} $DOCKER_SERVER '
-                        cd $PROJECT_DIR
+                        cd ${PROJECT_DIR}
                         docker ps -q | xargs docker stop
                         docker ps -aq | xargs docker rm
                         docker images -q | xargs docker rmi
-                        docker compose --env-file /home/ubuntu/chatapp/.env up -d 
+                        docker compose --env-file ${PROJECT_DIR}/.env up -d 
                     '
                     '''
                 }
