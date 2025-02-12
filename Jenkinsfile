@@ -34,6 +34,7 @@ pipeline {
                 script {
                     sh """
                     ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
+                      set -e
                       cd ${PROJECT_DIR}
                       docker stop $(docker ps -q)
                       docker rm $(docker ps -aq)
