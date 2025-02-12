@@ -33,13 +33,13 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} << 'EOF'
+                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
                     cd ${PROJECT_DIR}
                     docker stop \$(docker ps -q)
                     docker rm \$(docker ps -aq)
                     docker rmi \$(docker images -q)
                     docker compose --env-file .env up -d
-                    EOF
+                    '
                     """
                 }
             }
@@ -50,9 +50,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} << EOF
+                    ssh -i ${SSH_KEY} ${DOCKER_SERVER} '
                     docker ps 
-                    EOF
+                    '
                     """
                 }
             }
