@@ -34,7 +34,7 @@ pipeline {
                 script {
                     sh """
                     ssh -i ${SSH_KEY} ${DOCKER_SERVER} << EOF
-                    cd ${PROJECT_DIR}
+                    cd \${PROJECT_DIR}
                     docker stop $(docker ps -q)
                     docker rm $(docker ps -aq)
                     docker rmi $(docker images -q)
