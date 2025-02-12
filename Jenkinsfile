@@ -39,7 +39,7 @@ pipeline {
                         docker ps -q | xargs docker stop
                         docker ps -aq | xargs docker rm
                         docker images -q | xargs docker rmi
-                        docker compose --env-file ${PROJECT_DIR}/.env up -d 
+                        docker compose --env-file /home/ubuntu/chatapp/.env up -d 
                     '
                     '''
                 }
