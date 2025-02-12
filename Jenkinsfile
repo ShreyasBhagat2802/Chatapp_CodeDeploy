@@ -34,13 +34,13 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no $DOCKER_SERVER << EOF
-                    cd $PROJECT_DIR
-                    docker ps -q | xargs docker stop
-                    docker ps -aq | xargs docker rm
-                    docker images -q | xargs docker rmi
-                    docker compose --env-file .env up -d 
-                    EOF
+                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} $DOCKER_SERVER '
+                        cd $PROJECT_DIR
+                        docker ps -q | xargs docker stop
+                        docker ps -aq | xargs docker rm
+                        docker images -q | xargs docker rmi
+                        docker compose --env-file .env up -d 
+                    '
                     '''
                 }
             }
@@ -49,7 +49,11 @@ pipeline {
         stage('✅ Check Running Containers') {
             steps {
                 script {
-                    sh 'ssh -o StrictHostKeyChecking=no $DOCKER_SERVER "docker ps"'
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} $DOCKER_SERVER ' 
+                        docker ps
+                    '
+                    '''
                 }
             }
         }
